@@ -12,6 +12,9 @@ using Movies.Client.ApiServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
+using Movies.Client.HttpHandlers;
+using IdentityModel.Client;
 
 namespace Movies.Client
 {
@@ -29,26 +32,7 @@ namespace Movies.Client
         {
             services.AddControllersWithViews();
             services.AddScoped<IMovieApiService, MovieApiService>();
-            /* services.AddAuthentication(options =>
-             {
-                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-             })
-                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
-                 {
-
-                     options.Authority = "https://localhost:5005";
-                     options.ClientId = "movies_mvc_client";
-                     options.ClientSecret = "secret";
-                     options.ResponseType = "code id_token";
-
-                     options.SaveTokens = true;
-                     options.RequireHttpsMetadata = false;
-                     options.GetClaimsFromUserInfoEndpoint = true;
-                     options.Scope.Add("openid");
-                     options.Scope.Add("profile");
-                 });*/
+           
 
             services.AddAuthentication(options =>
             {
@@ -69,7 +53,34 @@ namespace Movies.Client
                  options.GetClaimsFromUserInfoEndpoint = true;
                  options.Scope.Add("openid");
                  options.Scope.Add("profile");
+
              });
+            // 1 create an HttpClient used for accessing the Movies.API
+            services.AddTransient<AuthenticationDelegatingHandler>();
+
+            services.AddHttpClient("MovieAPIClient", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:5001/"); // API GATEWAY URL
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+            }).AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+
+
+            // 2 create an HttpClient used for accessing the IDP
+            services.AddHttpClient("IDPClient", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:5005/");
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+            });
+
+            services.AddSingleton(new ClientCredentialsTokenRequest
+            {                                                
+              Address = "https://localhost:5005/connect/token",
+              ClientId = "movieClient",
+              ClientSecret = "secret",
+              Scope = "movieAPI"
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,12 +91,12 @@ namespace Movies.Client
                 app.UseDeveloperExceptionPage();
             }
             else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-          //  app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict });
+             {
+                 app.UseExceptionHandler("/Home/Error");
+                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                 app.UseHsts();
+             }
+            //  app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Strict });
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

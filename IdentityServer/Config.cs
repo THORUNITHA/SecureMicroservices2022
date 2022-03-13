@@ -58,8 +58,10 @@ namespace IdentityServer
                 //    FrontChannelLogoutUri = "https://localhost:44300/signout-oidc",
                  PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
 
-                 AllowOfflineAccess = true,
-                 AllowedScopes = { "openid", "profile","movies_mvc_client"}
+                // AllowOfflineAccess = true,
+                 AllowedScopes = new List<string>{
+                  IdentityServerConstants.StandardScopes.OpenId,
+                  IdentityServerConstants.StandardScopes.Profile}
                 }
 
       };

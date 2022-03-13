@@ -32,6 +32,16 @@ namespace Movies.API.Data
                 ImageUrl="images/src",
                 ReleaseDate=new DateTime(1993,5,5),
                 Owner="alice"
+            },
+             new Movie
+            {
+                Id=3,
+                Genre="Romantic",
+                Title="Titanic",
+                Rating="8.9",
+                ImageUrl="images/src",
+                ReleaseDate=new DateTime(1993,5,5),
+                Owner="bob"
             }
             };
                 moviesContext.Movie.AddRange(movies);
