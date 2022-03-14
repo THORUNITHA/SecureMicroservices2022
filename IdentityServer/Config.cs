@@ -22,7 +22,7 @@ namespace IdentityServer
               },
               AllowedScopes ={"movieAPI"}
           },
-         /* new Client
+         new Client
           {
               ClientId="movies_mvc_client",
               ClientName ="Movies MVC Web App",
@@ -44,10 +44,14 @@ namespace IdentityServer
               AllowedScopes=new List<string>
               {
                   IdentityServerConstants.StandardScopes.OpenId,
-                  IdentityServerConstants.StandardScopes.Profile
+                  IdentityServerConstants.StandardScopes.Profile,
+                  IdentityServerConstants.StandardScopes.Address,
+                  IdentityServerConstants.StandardScopes.Email,
+                  "movieAPI",
+                  "roles"
               }
-          }*/
-                new Client
+          }
+            /*    new Client
                 {
                  ClientId = "movies_mvc_client",
                 ClientSecrets = { new Secret("secret".Sha256()) },
@@ -62,7 +66,7 @@ namespace IdentityServer
                  AllowedScopes = new List<string>{
                   IdentityServerConstants.StandardScopes.OpenId,
                   IdentityServerConstants.StandardScopes.Profile}
-                }
+                }*/
 
       };
 
@@ -81,7 +85,15 @@ namespace IdentityServer
      new IdentityResource[]
      {
          new IdentityResources.OpenId(),
-         new IdentityResources.Profile()
+         new IdentityResources.Profile(),
+          new IdentityResources.Address(),
+          new IdentityResources.Email(),
+          new IdentityResource(
+              "roles",
+              "Your role(s)",
+              new List<string>(){"role"}) 
+         
+
      };
 
         public static List<TestUser> TestUsers =>

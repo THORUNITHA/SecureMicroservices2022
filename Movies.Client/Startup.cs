@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using Movies.Client.HttpHandlers;
 using IdentityModel.Client;
+using Microsoft.IdentityModel.Tokens;
+using IdentityModel;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Movies.Client
 {
@@ -42,17 +45,28 @@ namespace Movies.Client
              .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
              .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
              {
-                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                
                  options.Authority = "https://localhost:5005";
                  options.ClientId = "movies_mvc_client";
                  options.ClientSecret = "secret";
-                 options.ResponseType = "code";
+                 options.ResponseType = "code id_token";
 
-                 options.SaveTokens = true;
-                // options.RequireHttpsMetadata = false;
-                 options.GetClaimsFromUserInfoEndpoint = true;
                  options.Scope.Add("openid");
                  options.Scope.Add("profile");
+                 
+                 options.Scope.Add("address");
+                 options.Scope.Add("email");
+                 options.Scope.Add("movieAPI");
+                 options.Scope.Add("roles");
+                 options.ClaimActions.MapUniqueJsonKey("role", "role");
+                 options.SaveTokens = true;
+                  
+                 options.GetClaimsFromUserInfoEndpoint = true;
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     NameClaimType = JwtClaimTypes.GivenName,
+                     RoleClaimType = JwtClaimTypes.Role
+                 };
 
              });
             // 1 create an HttpClient used for accessing the Movies.API
@@ -60,7 +74,7 @@ namespace Movies.Client
 
             services.AddHttpClient("MovieAPIClient", client =>
             {
-                client.BaseAddress = new Uri("https://localhost:5001/"); // API GATEWAY URL
+                client.BaseAddress = new Uri("https://localhost:5010/");
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
             }).AddHttpMessageHandler<AuthenticationDelegatingHandler>();
@@ -73,14 +87,16 @@ namespace Movies.Client
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
             });
+            services.AddHttpContextAccessor();
 
-            services.AddSingleton(new ClientCredentialsTokenRequest
+
+            /*services.AddSingleton(new ClientCredentialsTokenRequest
             {                                                
               Address = "https://localhost:5005/connect/token",
               ClientId = "movieClient",
               ClientSecret = "secret",
               Scope = "movieAPI"
-            });
+            });*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
