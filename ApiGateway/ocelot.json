@@ -1,8 +1,8 @@
 {
   "Routes": [
-    //Movie API -- https://localhost:5001/api/movies
+    //Movie API -- https://localhost:5001/api/students
     {
-      "DownstreamPathTemplate": "/api/movies",
+      "DownstreamPathTemplate": "/api/students",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -10,12 +10,12 @@
           "Port": "5001"
         }
       ],
-      "UpstreamPathTemplate": "/movies",
+      "UpstreamPathTemplate": "/students",
       "UpstreamHttpMethod": [ "GET", "POST", "PUT" ],
-   "AuthenticationOptions": {
-     "AuthenticationProviderKey": "IdentityApiKey",
-     "AllowedScopes": []
-    }
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "IdentityApiKey",
+        "AllowedScopes": []
+      }
     }
   ]
 }

@@ -14,18 +14,18 @@ namespace IdentityServer
       {
           new Client
           {
-              ClientId ="movieClient",
+              ClientId ="studentClient",
               AllowedGrantTypes = GrantTypes.ClientCredentials,
               ClientSecrets =
               {
                   new Secret("secret".Sha256())
               },
-              AllowedScopes ={"movieAPI"}
+              AllowedScopes ={"studentAPI"}
           },
          new Client
           {
-              ClientId="movies_mvc_client",
-              ClientName ="Movies MVC Web App",
+              ClientId="students_mvc_client",
+              ClientName ="Students MVC Web App",
               AllowedGrantTypes=GrantTypes.Hybrid,
               RequirePkce=false,
               AllowRememberConsent=false,
@@ -47,13 +47,13 @@ namespace IdentityServer
                   IdentityServerConstants.StandardScopes.Profile,
                   IdentityServerConstants.StandardScopes.Address,
                   IdentityServerConstants.StandardScopes.Email,
-                  "movieAPI",
+                  "studentAPI",
                   "roles"
               }
           }
             /*    new Client
                 {
-                 ClientId = "movies_mvc_client",
+                 ClientId = "students_mvc_client",
                 ClientSecrets = { new Secret("secret".Sha256()) },
                     
                 AllowedGrantTypes = GrantTypes.Code,
@@ -73,7 +73,7 @@ namespace IdentityServer
         public static IEnumerable<ApiScope> ApiScopes =>
        new ApiScope[]
        {
-           new ApiScope("movieAPI", "Movie API")
+           new ApiScope("studentAPI", "student API")
        };
 
         public static IEnumerable<ApiResource> ApiResources =>
