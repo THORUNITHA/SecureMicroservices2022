@@ -36,9 +36,9 @@ namespace Students.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Students.API", Version = "v1" });
             });
 
-            services.AddDbContext<StudentAPIContext>(options =>
+         services.AddDbContext<StudentAPIContext>(options =>
                     options.UseInMemoryDatabase("Students"));
-            services.AddAuthentication("Bearer")
+         services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer",options=>
                 {
                     options.Authority = "https://localhost:5005";
@@ -47,9 +47,16 @@ namespace Students.API
                         ValidateAudience = false
                     };
                 });
-         services.AddAuthorization(options =>
+            // adds an authorization policy to make sure the token is for scope 'studentAPI'
+            services.AddAuthorization(options =>
             {
-                options.AddPolicy("ClientPolicy", policy => policy.RequireClaim("client_id", "studentClient","students_mvc_client"));
+               
+                options.AddPolicy("ApiScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "studentAPI");
+                });
+                options.AddPolicy("ClientPolicy", policy => policy.RequireClaim("client_id", "studentClient", "students_mvc_client", "ro.client"));
             });
         }
 
@@ -72,7 +79,7 @@ namespace Students.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers().RequireAuthorization("ApiScope"); ;
             });
         }
     }

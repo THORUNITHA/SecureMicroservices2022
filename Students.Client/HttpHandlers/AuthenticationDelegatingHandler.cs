@@ -13,10 +13,10 @@ namespace Students.Client.HttpHandlers
 {
     public class AuthenticationDelegatingHandler:DelegatingHandler
     {
-        /* private readonly IHttpClientFactory _httpClientFactory;
-          private readonly ClientCredentialsTokenRequest _tokenRequest;
+       //  private readonly IHttpClientFactory _httpClientFactory;
+       //   private readonly ClientCredentialsTokenRequest _tokenRequest;
 
-        public AuthenticationDelegatingHandler(IHttpClientFactory httpClientFactory, ClientCredentialsTokenRequest tokenRequest)
+     /*   public AuthenticationDelegatingHandler(IHttpClientFactory httpClientFactory, ClientCredentialsTokenRequest tokenRequest)
          {
              _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
              _tokenRequest = tokenRequest ?? throw new ArgumentNullException(nameof(tokenRequest));
@@ -27,7 +27,7 @@ namespace Students.Client.HttpHandlers
         {
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
-
+     
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
           /*  var httpClient = _httpClientFactory.CreateClient("IDPClient");

@@ -19,7 +19,7 @@ namespace Students.Client.ApiServices
         public StudentApiService(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-          _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+           _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
         public async Task<UserInfoViewModel> GetUserInfo()
         {
@@ -67,7 +67,8 @@ namespace Students.Client.ApiServices
 
             var response = await httpClient.SendAsync(
                 request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
-
+            Console.WriteLine(response);
+            Console.WriteLine(response.Headers);
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync();

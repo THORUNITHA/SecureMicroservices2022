@@ -1,5 +1,5 @@
 ﻿@model Students.Client.Models.UserInfoViewModel
-
+@using Microsoft.AspNetCore.Authentication
 @{
     ViewData["Title"] = "OnlyAdmin";
 }
@@ -31,3 +31,60 @@
         }
     </tbody>
 </table>
+    <h1>Claims</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Claim Type
+                </th>
+                <th>
+                    Claim Value
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var claim in User.Claims)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => claim.Type)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => claim.Value)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+        <h1>PROPERTIES</h1>
+  
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Claim Type
+                    </th>
+                    <th>
+                        Claim Value
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var prop in (await Context.AuthenticateAsync()).Properties.Items)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => prop.Key)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => prop.Value)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+

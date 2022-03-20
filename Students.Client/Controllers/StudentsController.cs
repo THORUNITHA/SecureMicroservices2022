@@ -36,7 +36,7 @@ namespace Students.Client.Controllers
         {
             await LogTokenAndClaims();
             var students = await _studentApiService.GetStudents();
-            students = FilterMovies(students.ToList());
+            students = FilterStudents(students.ToList());
 
             return View(students);
 
@@ -61,7 +61,8 @@ namespace Students.Client.Controllers
             var identityToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.IdToken);
 
             Debug.WriteLine($"Identity token: {identityToken}");
-
+            var accessToken = await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            Debug.WriteLine($"Access token: {accessToken}");
             foreach (var claim in User.Claims)
             {
                 Debug.WriteLine($"Claim type: {claim.Type} - Claim value: {claim.Value}");
@@ -130,7 +131,7 @@ namespace Students.Client.Controllers
         {
             return true;
         }
-        private List<Student> FilterMovies(List<Student> students)
+        private List<Student> FilterStudents(List<Student> students)
         {
             return students.FindAll(m => m.Owner.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase));
         }

@@ -1,6 +1,6 @@
 {
   "Routes": [
-    //Movie API -- https://localhost:5001/api/students
+    //Student API -- https://localhost:5001/api/students
     {
       "DownstreamPathTemplate": "/api/students",
       "DownstreamScheme": "https",

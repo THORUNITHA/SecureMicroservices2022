@@ -22,8 +22,20 @@ namespace IdentityServer
               },
               AllowedScopes ={"studentAPI"}
           },
+             new Client
+                {
+                    ClientId="ro.client",
+                    AllowedGrantTypes=GrantTypes.ResourceOwnerPassword,
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+          
+                    AllowedScopes={ "studentAPI" }
+                },
          new Client
           {
+             
               ClientId="students_mvc_client",
               ClientName ="Students MVC Web App",
               AllowedGrantTypes=GrantTypes.Hybrid,
@@ -107,8 +119,9 @@ namespace IdentityServer
                 {
                     new Claim(JwtClaimTypes.GivenName,"thoru"),
                     new Claim(JwtClaimTypes.FamilyName,"ss")
+
                 }
-                }
+                },
             };
 
 

@@ -54,20 +54,23 @@ namespace Students.Client
                  options.ResponseType = "code id_token";
 
                  options.Scope.Add("openid");
-                 options.Scope.Add("profile");
-                 
-                 options.Scope.Add("address");
-                 options.Scope.Add("email");
+                 options.Scope.Add("profile"); 
                  options.Scope.Add("studentAPI");
                  options.Scope.Add("roles");
+                 options.Scope.Add("address");
+                 options.Scope.Add("email");
                  options.ClaimActions.MapUniqueJsonKey("role", "role");
+               
                  options.SaveTokens = true;
                   
                  options.GetClaimsFromUserInfoEndpoint = true;
                  options.TokenValidationParameters = new TokenValidationParameters
                  {
                      NameClaimType = JwtClaimTypes.GivenName,
-                     RoleClaimType = JwtClaimTypes.Role
+                     RoleClaimType = JwtClaimTypes.Role,
+                    
+                    
+
                  };
 
              });
@@ -92,7 +95,7 @@ namespace Students.Client
             services.AddHttpContextAccessor();
 
 
-           /* services.AddSingleton(new ClientCredentialsTokenRequest
+        /*  services.AddSingleton(new ClientCredentialsTokenRequest
             {                                                
               Address = "https://localhost:5005/connect/token",
               ClientId = "studentClient",

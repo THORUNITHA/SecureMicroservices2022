@@ -26,8 +26,8 @@ namespace Students.API
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var moviesContext = services.GetRequiredService<StudentAPIContext>();
-                StudentContextSeed.SeedAsync(moviesContext);
+                var studentsContext = services.GetRequiredService<StudentAPIContext>();
+                StudentContextSeed.SeedAsync(studentsContext);
             }
         }
         public static IHostBuilder CreateHostBuilder(string[] args) =>
